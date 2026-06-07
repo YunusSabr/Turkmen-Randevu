@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Randevu Sistemi</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .app {
+      max-width: 420px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin: auto;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .header {
+      text-align: center;
+      padding: 1.25rem 0 1rem;
+      border-bottom: 0.5px solid #e5e5e5;
+      margin-bottom: 1.25rem;
+    }
+    .header h1 { font-size: 20px; font-weight: 600; }
+    .header p { font-size: 13px; color: #666; margin-top: 4px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; }
+    .tab {
+      flex: 1;
+      padding: 10px 6px;
+      border: 0.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      background: #fff;
+      color: #888;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1.5;
+      transition: all 0.15s;
+    }
+    .tab.active {
+      background: #f5f5f3;
+      color: #1a1a1a;
+      border-color: #bbb;
+    }
+
+    .venue-info {
+      background: #f5f5f3;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .venue-info i { font-size: 16px; color: #888; margin-top: 2px; flex-shrink: 0; }
+    .venue-info p { font-size: 13px; color: #666; line-height: 1.5; }
+    .venue-info strong { color: #1a1a1a; font-weight: 600; display: block; margin-bottom: 2px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      margin-top: 1.25rem;
+    }
+
+    .event-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .event-card {
+      border: 0.5px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 12px 8px;
+      cursor: pointer;
+      text-align: center;
+      background: #fff;
+      transition: all 0.15s;
+    }
+    .event-card.selected {
+      background: #f5f5f3;
+      border-color: #bbb;
+    }
+    .event-card i { font-size: 22px; color: #aaa; display: block; margin-bottom: 5px; }
+    .event-card.selected i { color: #1a1a1a; }
+    .event-card span { font-size: 12px; color: #888; font-weight: 500; }
+    .event-card.selected span { color: #1a1a1a; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 0.5px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: #999; }
+    .form-group textarea { resize: none; min-height: 72px; }
+
+    .row2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: opacity 0.15s;
+    }
+    .submit-btn:hover { opacity: 0.85; }
+
+    /* Davetiye ekranı */
+    .invite-screen { display: none; padding: 0.5rem 0; }
+
+    .invite-card {
+      border: 0.5px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 1.5rem 1.25rem;
+      background: #fff;
+      margin-bottom: 1rem;
+    }
+    .invite-title { font-size: 22px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+    .invite-sub { font-size: 13px; color: #888; margin-bottom: 1.25rem; }
+    .invite-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-top: 0.5px solid #f0f0f0;
+    }
+    .invite-detail i { font-size: 16px; color: #aaa; margin-top: 2px; width: 18px; flex-shrink: 0; }
+    .invite-detail .lbl { font-size: 11px; color: #aaa; display: block; margin-bottom: 1px; }
+    .invite-detail .val { font-size: 13px; color: #1a1a1a; }
+
+    .link-box {
+      background: #f5f5f3;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #666;
+      word-break: break-all;
+      margin-bottom: 8px;
+    }
+
+    .copy-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 0.5px solid #ddd;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: #f5f5f3; }
+
+    .new-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: none;
+      background: #f5f5f3;
+      color: #888;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .copied-msg {
+      text-align: center;
+      font-size: 12px;
+      color: #4caf50;
+      margin-top: 6px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- FORM EKRANI -->
+    <div id="form-screen">
+      <div class="header">
+        <h1>Randevu Sistemi</h1>
+        <p>Salon rezervasyonu oluşturun</p>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('dernek', this)">Türk Dünyası<br>Derneği</div>
+        <div class="tab" onclick="switchTab('vakif', this)">Türkmen<br>Vakıf</div>
+      </div>
+
+      <div id="dernek-info" class="venue-info">
+        <i class="ti ti-map-pin"></i>
+        <p><strong>Türk Dünyası Derneği</strong>Yeşiltepe, 53/1 Sokak No:21-13, Zeytinburnu / İstanbul</p>
+      </div>
+      <div id="vakif-info" class="venue-info" style="display:none">
+        <i class="ti ti-map-pin"></i>
+        <p><strong>Türkmen Vakıf</strong>Gökalp, 39/9. Sk. 3-6, 34020 Zeytinburnu / İstanbul</p>
+      </div>
+
+      <p class="section-label">Etkinlik türü</p>
+      <div class="event-grid">
+        <div class="event-card selected" onclick="selectEvent(this, 'Yemek')"><i class="ti ti-tools-kitchen-2"></i><span>Yemek</span></div>
+        <div class="event-card" onclick="selectEvent(this, 'Düğün')"><i class="ti ti-heart"></i><span>Düğün</span></div>
+        <div class="event-card" onclick="selectEvent(this, 'Nişan')"><i class="ti ti-diamond"></i><span>Nişan</span></div>
+        <div class="event-card" onclick="selectEvent(this, 'Kına')"><i class="ti ti-sparkles"></i><span>Kına</span></div>
+        <div class="event-card" onclick="selectEvent(this, 'Toplantı')"><i class="ti ti-users"></i><span>Toplantı</span></div>
+        <div class="event-card" onclick="selectEvent(this, 'Davet')"><i class="ti ti-confetti"></i><span>Davet</span></div>
+      </div>
+
+      <p class="section-label">Tarih, saat ve süre</p>
+      <div class="row2">
+        <div class="form-group"><label>Tarih</label><input type="date" id="f-date" /></div>
+        <div class="form-group"><label>Başlangıç saati</label><input type="time" id="f-time" /></div>
+      </div>
+      <div class="form-group">
+        <label>Etkinlik süresi</label>
+        <select id="f-duration">
+          <option value="2">2 saat</option>
+          <option value="3">3 saat</option>
+          <option value="4">4 saat</option>
+          <option value="5">5 saat</option>
+          <option value="6">6 saat</option>
+          <option value="8">8 saat (tam gün)</option>
+        </select>
+      </div>
+
+      <p class="section-label">Katılımcı sayısı</p>
+      <div class="form-group">
+        <label>Tahmini kişi sayısı</label>
+        <select id="f-guests">
+          <option value="1–20">1 – 20 kişi</option>
+          <option value="20–50">20 – 50 kişi</option>
+          <option value="50–100">50 – 100 kişi</option>
+          <option value="100–200">100 – 200 kişi</option>
+          <option value="200–300">200 – 300 kişi</option>
+          <option value="300+">300+ kişi</option>
+        </select>
+      </div>
+
+      <p class="section-label">Kişisel bilgiler</p>
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="f-name" placeholder="Adınızı girin" /></div>
+      <div class="form-group"><label>Telefon</label><input type="tel" id="f-phone" placeholder="+90 5xx xxx xx xx" /></div>
+      <div class="form-group"><label>Notlar (opsiyonel)</label><textarea id="f-notes" placeholder="Yemek tercihi, özel istekler..."></textarea></div>
+
+      <button class="submit-btn" onclick="submitForm()">Randevu Oluştur ve Davetiye Al</button>
+    </div>
+
+    <!-- DAVETİYE EKRANI -->
+    <div class="invite-screen" id="invite-screen">
+      <div class="header">
+        <h1>Randevunuz alındı</h1>
+        <p>Dijital davetiyeniz hazır</p>
+      </div>
+
+      <div class="invite-card">
+        <div class="invite-title" id="inv-event">Düğün</div>
+        <div class="invite-sub" id="inv-venue">Türkmen Vakıf</div>
+        <div class="invite-detail">
+          <i class="ti ti-user"></i>
+          <div><span class="lbl">Düzenleyen</span><span class="val" id="inv-name">—</span></div>
+        </div>
+        <div class="invite-detail">
+          <i class="ti ti-calendar"></i>
+          <div><span class="lbl">Tarih</span><span class="val" id="inv-date">—</span></div>
+        </div>
+        <div class="invite-detail">
+          <i class="ti ti-clock"></i>
+          <div><span class="lbl">Saat ve süre</span><span class="val" id="inv-time">—</span></div>
+        </div>
+        <div class="invite-detail">
+          <i class="ti ti-users"></i>
+          <div><span class="lbl">Katılımcı</span><span class="val" id="inv-guests">—</span></div>
+        </div>
+        <div class="invite-detail">
+          <i class="ti ti-map-pin"></i>
+          <div><span class="lbl">Adres</span><span class="val" id="inv-addr">—</span></div>
+        </div>
+      </div>
+
+      <p style="font-size:13px; color:#888; margin-bottom:8px;">Davet linki — paylaşın</p>
+      <div class="link-box" id="inv-link">turkmenrandevu.com/davet/ABC123</div>
+      <button class="copy-btn" onclick="copyLink()"><i class="ti ti-copy"></i> Linki kopyala</button>
+      <div class="copied-msg" id="copied-msg">Kopyalandı!</div>
+      <button class="new-btn" onclick="newForm()">Yeni randevu oluştur</button>
+    </div>
+
+  </div>
+
+  <script>
+    let selectedEvent = 'Yemek';
+    let selectedVenue = 'dernek';
+
+    const venues = {
+      dernek: {
+        name: 'Türk Dünyası Derneği',
+        addr: 'Yeşiltepe, 53/1 Sokak No:21-13, Zeytinburnu / İstanbul'
+      },
+      vakif: {
+        name: 'Türkmen Vakıf',
+        addr: 'Gökalp, 39/9. Sk. 3-6, 34020 Zeytinburnu / İstanbul'
+      }
+    };
+
+    function switchTab(tab, el) {
+      selectedVenue = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('dernek-info').style.display = tab === 'dernek' ? 'flex' : 'none';
+      document.getElementById('vakif-info').style.display = tab === 'vakif' ? 'flex' : 'none';
+    }
+
+    function selectEvent(el, name) {
+      selectedEvent = name;
+      document.querySelectorAll('.event-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function submitForm() {
+      const name = document.getElementById('f-name').value || 'Belirtilmedi';
+      const date = document.getElementById('f-date').value;
+      const time = document.getElementById('f-time').value;
+      const duration = document.getElementById('f-duration').value;
+      const guests = document.getElementById('f-guests').value;
+      const venue = venues[selectedVenue];
+
+      const formattedDate = date
+        ? new Date(date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+        : 'Belirtilmedi';
+      const formattedTime = time ? time + ' – ' + duration + ' saat' : 'Belirtilmedi';
+      const code = Math.random().toString(36).substr(2, 6).toUpperCase();
+      const link = 'turkmenrandevu.com/davet/' + code;
+
+      document.getElementById('inv-event').textContent = selectedEvent;
+      document.getElementById('inv-venue').textContent = venue.name;
+      document.getElementById('inv-name').textContent = name;
+      document.getElementById('inv-date').textContent = formattedDate;
+      document.getElementById('inv-time').textContent = formattedTime;
+      document.getElementById('inv-guests').textContent = guests + ' kişi';
+      document.getElementById('inv-addr').textContent = venue.addr;
+      document.getElementById('inv-link').textContent = link;
+
+      document.getElementById('form-screen').style.display = 'none';
+      document.getElementById('invite-screen').style.display = 'block';
+    }
+
+    function copyLink() {
+      const link = document.getElementById('inv-link').textContent;
+      navigator.clipboard.writeText(link).catch(() => {});
+      document.getElementById('copied-msg').style.display = 'block';
+      setTimeout(() => document.getElementById('copied-msg').style.display = 'none', 2000);
+    }
+
+    function newForm() {
+      document.getElementById('form-screen').style.display = 'block';
+      document.getElementById('invite-screen').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
