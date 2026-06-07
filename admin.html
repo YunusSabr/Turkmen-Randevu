@@ -148,9 +148,9 @@
 
       let mesaj = '';
       if (tip === 'onay') {
-        mesaj = `Sayın ${randevu.ad_soyad},\n\n✅ Randevunuz onaylanmıştır.\n\n📍 Mekan: ${randevu.mekan}\n🎉 Etkinlik: ${randevu.etkinlik}\n📅 Tarih: ${tarih}\n⏰ Saat: ${randevu.saat} (${randevu.sure})\n👥 Katılımcı: ${randevu.misafir_sayisi} kişi\n\nİyi etkinlikler dileriz. 🙏`;
+        mesaj = `Sayın ${randevu.ad_soyad},\n\nRandevunuz onaylanmıştır.\n\nMekan: ${randevu.mekan}\nEtkinlik: ${randevu.etkinlik}\nTarih: ${tarih}\nSaat: ${randevu.saat} (${randevu.sure})\nKatılımcı: ${randevu.misafir_sayisi} kişi\n\nİyi etkinlikler dileriz.`;
       } else {
-        mesaj = `Sayın ${randevu.ad_soyad},\n\n❌ Maalesef randevu talebiniz uygun görülmemiştir.\n\n📍 Mekan: ${randevu.mekan}\n🎉 Etkinlik: ${randevu.etkinlik}\n📅 Tarih: ${tarih}\n\nBaşka bir tarih için tekrar randevu oluşturabilirsiniz. Anlayışınız için teşekkür ederiz.`;
+        mesaj = `Sayın ${randevu.ad_soyad},\n\nMaalesef randevu talebiniz uygun görülmemiştir.\n\nMekan: ${randevu.mekan}\nEtkinlik: ${randevu.etkinlik}\nTarih: ${tarih}\n\nBaşka bir tarih için tekrar randevu oluşturabilirsiniz. Anlayışınız için teşekkür ederiz.`;
       }
 
       const telefon = randevu.telefon.replace(/\D/g, '');
