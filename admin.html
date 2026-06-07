@@ -8,8 +8,6 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
-
-    /* GİRİŞ EKRANI */
     .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .login-box { background: #fff; border-radius: 16px; padding: 2rem; width: 100%; max-width: 360px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
     .login-box h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
@@ -18,25 +16,18 @@
     .login-box input:focus { border-color: #999; }
     .login-btn { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #1a1a1a; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; }
     .login-error { font-size: 13px; color: #e53935; margin-top: 8px; text-align: center; display: none; }
-
-    /* ADMIN PANEL */
     .panel { display: none; }
     .topbar { background: #fff; border-bottom: 0.5px solid #e5e5e5; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
     .topbar h1 { font-size: 16px; font-weight: 600; }
-    .topbar span { font-size: 13px; color: #888; }
     .logout-btn { font-size: 13px; color: #888; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-
     .content { padding: 1.5rem; max-width: 900px; margin: 0 auto; }
-
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
     .stat-card { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; }
     .stat-card .lbl { font-size: 12px; color: #888; margin-bottom: 4px; }
     .stat-card .val { font-size: 24px; font-weight: 600; }
-
     .filters { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
     .filter-btn { padding: 7px 14px; border-radius: 20px; border: 0.5px solid #ddd; background: #fff; font-size: 13px; cursor: pointer; color: #888; transition: all 0.15s; }
     .filter-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-
     .randevu-list { display: flex; flex-direction: column; gap: 10px; }
     .randevu-card { background: #fff; border-radius: 12px; padding: 1rem 1.25rem; border: 0.5px solid #e5e5e5; }
     .randevu-card.onaylandi { border-left: 3px solid #4caf50; }
@@ -51,17 +42,18 @@
     .card-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
     .detail-item { font-size: 12px; color: #666; display: flex; align-items: center; gap: 5px; }
     .detail-item i { font-size: 14px; color: #aaa; }
-    .card-actions { display: flex; gap: 8px; }
-    .btn-onayla { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #e8f5e9; color: #2e7d32; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-    .btn-reddet { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #ffebee; color: #c62828; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-onayla { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #e8f5e9; color: #2e7d32; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 100px; }
+    .btn-reddet { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #ffebee; color: #c62828; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 100px; }
+    .btn-wp { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #e8f5e9; color: #1b5e20; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 100px; }
+    .btn-wp-red { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #ffebee; color: #b71c1c; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 100px; }
     .btn-onayla:hover { background: #c8e6c9; }
     .btn-reddet:hover { background: #ffcdd2; }
-
+    .btn-wp:hover { background: #c8e6c9; }
+    .btn-wp-red:hover { background: #ffcdd2; }
     .empty { text-align: center; padding: 3rem; color: #aaa; font-size: 14px; }
     .loading { text-align: center; padding: 2rem; color: #aaa; font-size: 14px; }
-
     @media (max-width: 600px) {
-      .stats { grid-template-columns: repeat(3, 1fr); }
       .card-details { grid-template-columns: 1fr; }
       .content { padding: 1rem; }
     }
@@ -69,7 +61,6 @@
 </head>
 <body>
 
-  <!-- GİRİŞ -->
   <div class="login-wrap" id="login-screen">
     <div class="login-box">
       <h1>Admin Girişi</h1>
@@ -80,36 +71,23 @@
     </div>
   </div>
 
-  <!-- PANEL -->
   <div class="panel" id="panel">
     <div class="topbar">
       <h1>Randevu Paneli</h1>
       <button class="logout-btn" onclick="cikis()"><i class="ti ti-logout"></i> Çıkış</button>
     </div>
-
     <div class="content">
       <div class="stats">
-        <div class="stat-card">
-          <div class="lbl">Toplam</div>
-          <div class="val" id="stat-toplam">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="lbl">Bekleyen</div>
-          <div class="val" id="stat-bekleyen">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="lbl">Onaylanan</div>
-          <div class="val" id="stat-onaylanan">0</div>
-        </div>
+        <div class="stat-card"><div class="lbl">Toplam</div><div class="val" id="stat-toplam">0</div></div>
+        <div class="stat-card"><div class="lbl">Bekleyen</div><div class="val" id="stat-bekleyen">0</div></div>
+        <div class="stat-card"><div class="lbl">Onaylanan</div><div class="val" id="stat-onaylanan">0</div></div>
       </div>
-
       <div class="filters">
         <button class="filter-btn active" onclick="filtrele('hepsi', this)">Hepsi</button>
         <button class="filter-btn" onclick="filtrele('bekliyor', this)">Bekleyen</button>
         <button class="filter-btn" onclick="filtrele('onaylandi', this)">Onaylanan</button>
         <button class="filter-btn" onclick="filtrele('reddedildi', this)">Reddedilen</button>
       </div>
-
       <div class="randevu-list" id="randevu-list">
         <div class="loading">Yükleniyor...</div>
       </div>
@@ -163,6 +141,23 @@
       listeyiGoster();
     }
 
+    function wpMesajAc(randevu, tip) {
+      const tarih = randevu.tarih
+        ? new Date(randevu.tarih).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+        : '—';
+
+      let mesaj = '';
+      if (tip === 'onay') {
+        mesaj = `Sayın ${randevu.ad_soyad},\n\n✅ Randevunuz onaylanmıştır.\n\n📍 Mekan: ${randevu.mekan}\n🎉 Etkinlik: ${randevu.etkinlik}\n📅 Tarih: ${tarih}\n⏰ Saat: ${randevu.saat} (${randevu.sure})\n👥 Katılımcı: ${randevu.misafir_sayisi} kişi\n\nİyi etkinlikler dileriz. 🙏`;
+      } else {
+        mesaj = `Sayın ${randevu.ad_soyad},\n\n❌ Maalesef randevu talebiniz uygun görülmemiştir.\n\n📍 Mekan: ${randevu.mekan}\n🎉 Etkinlik: ${randevu.etkinlik}\n📅 Tarih: ${tarih}\n\nBaşka bir tarih için tekrar randevu oluşturabilirsiniz. Anlayışınız için teşekkür ederiz.`;
+      }
+
+      const telefon = randevu.telefon.replace(/\D/g, '');
+      const url = `https://wa.me/${telefon}?text=${encodeURIComponent(mesaj)}`;
+      window.open(url, '_blank');
+    }
+
     function listeyiGoster() {
       const filtered = aktifFiltre === 'hepsi'
         ? tumRandevular
@@ -176,7 +171,26 @@
 
       list.innerHTML = filtered.map(r => {
         const durum = r.durum || 'bekliyor';
-        const tarih = r.tarih ? new Date(r.tarih).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+        const tarih = r.tarih
+          ? new Date(r.tarih).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+          : '—';
+
+        const bekleyenButonlar = `
+          <div class="card-actions">
+            <button class="btn-onayla" onclick="durumGuncelle(${r.id}, 'onaylandi')"><i class="ti ti-check"></i> Onayla</button>
+            <button class="btn-reddet" onclick="durumGuncelle(${r.id}, 'reddedildi')"><i class="ti ti-x"></i> Reddet</button>
+          </div>`;
+
+        const onaylandiButonlar = `
+          <div class="card-actions">
+            <button class="btn-wp" onclick='wpMesajAc(${JSON.stringify(r)}, "onay")'><i class="ti ti-brand-whatsapp"></i> Onay mesajı gönder</button>
+          </div>`;
+
+        const reddedildiButonlar = `
+          <div class="card-actions">
+            <button class="btn-wp-red" onclick='wpMesajAc(${JSON.stringify(r)}, "red")'><i class="ti ti-brand-whatsapp"></i> Red mesajı gönder</button>
+          </div>`;
+
         return `
           <div class="randevu-card ${durum}" id="kart-${r.id}">
             <div class="card-top">
@@ -193,13 +207,8 @@
               <div class="detail-item"><i class="ti ti-phone"></i>${r.telefon || '—'}</div>
             </div>
             ${r.notlar ? `<div style="font-size:12px;color:#888;margin-bottom:10px;padding:8px;background:#f9f9f7;border-radius:8px;">${r.notlar}</div>` : ''}
-            ${durum === 'bekliyor' ? `
-            <div class="card-actions">
-              <button class="btn-onayla" onclick="durumGuncelle(${r.id}, 'onaylandi')"><i class="ti ti-check"></i> Onayla</button>
-              <button class="btn-reddet" onclick="durumGuncelle(${r.id}, 'reddedildi')"><i class="ti ti-x"></i> Reddet</button>
-            </div>` : ''}
-          </div>
-        `;
+            ${durum === 'bekliyor' ? bekleyenButonlar : durum === 'onaylandi' ? onaylandiButonlar : reddedildiButonlar}
+          </div>`;
       }).join('');
     }
 
@@ -215,6 +224,9 @@
         body: JSON.stringify({ durum })
       });
       await randevulariYukle();
+
+      const r = tumRandevular.find(x => x.id === id);
+      if (r) wpMesajAc(r, durum === 'onaylandi' ? 'onay' : 'red');
     }
   </script>
 </body>
